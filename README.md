@@ -1,17 +1,19 @@
 # GuJi_AI_Tools
 The data sets of AI based collation tools of chinese ancient texts.
 
-  1. Automatic punctuation
+  1. Automatic Punctuation
 
-  2. Automatic annotation
+  2. Automatic Annotation
 
   3. Automatic Pinyin
   
-  4. Potraint 
+  4. Portrait Recognition
 
-  5. Statue recognition
+  5. Statue Recognition
   
-  6. stone inscription recognition
+  6. Stone Inscription Recognition
   
-  7. Sutra chanting recognition
+  7. Sutra Chanting Recognition
+  
+  8. FaQi Recognition
   
