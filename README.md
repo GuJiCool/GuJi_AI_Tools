@@ -5,7 +5,7 @@ The data sets of AI based collation tools of chinese ancient texts.
 
   2. Automatic Annotation
 
-  3. Automatic Pinyin
+  3. Automatic Phoneticize
   
   4. Portrait Recognition
 
