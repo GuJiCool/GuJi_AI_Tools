@@ -1,0 +1,112 @@
+# 文献分类整理脚本功能：
+# 1、将原始数据文件路径：d:/data/儒藏（下数据文件夹内的文件分类）；   
+# 2、有标点文献保存到：  d:/data/整理结果/儒藏/1 标点文献
+# 3、句读的文献保存到：  d:/data/整理结果/儒藏/2 句读文献
+# 4、无标点的文献存到：  d:/data/整理结果/儒藏/3 无标点文献
+# 4、无标点的文献存到：  d:/data/整理结果/儒藏/4 其他标点文献
+# 5、详细清单保存到：    d:/data/整理结果/儒藏/
+
+import os, shutil, string
+from openpyxl import Workbook
+
+docum_name = "佛藏/"
+docum_path = "d:/data/"
+
+if __name__=='__main__':
+    
+    numb = 0
+    work_dir = docum_path + docum_name
+    print (work_dir)
+    
+    path1 = docum_path + '整理结果/' + docum_name + '1 标点文件/'
+    path2 = docum_path + '整理结果/' + docum_name + '2 句读文献/'
+    path3 = docum_path + '整理结果/' + docum_name + '3 无标点文献/'
+    path4 = docum_path + '整理结果/' + docum_name + '4 其他标点文献/'
+
+    store_path = ['amitabha', path1, path2, path3, path4 ]
+    
+    if not os.path.exists(path1):
+        os.makedirs( path1 )
+    if not os.path.exists(path2):
+        os.makedirs( path2 )
+    if not os.path.exists(path3):
+        os.makedirs( path3 )
+    if not os.path.exists(path4):
+        os.makedirs( path4 )
+
+    listpath_xlsx = docum_path + '整理结果/' + docum_name + "文献清单.xlsx"
+    
+    wkbk = Workbook()
+    wksht = wkbk.active
+
+    title = ['序号', '文件名', '类型', '字数', '文件大小', '所在路径']
+    for i in range(len(title)):
+        wksht.cell( 1, i+1 ).value = title[i]
+    
+    for parent, dirnames, filenames in os.walk( work_dir, followlinks = True ):
+
+        for filename in filenames:
+            file_path = os.path.join( parent, filename )
+
+            numb += 1
+
+            filsiz = os.path.getsize( file_path )   # 文件大小
+            
+            fi = open( file_path,"r",encoding = 'utf-8')
+
+            str = fi.readline()
+            print ( str )
+                      
+            words_num = a = b = c = 0
+            for line in fi:
+                words_num += len(line)            # 总字数（包括标点）
+                a += line.count('，')             # 逗号个数
+                b += line.count('。')             # 句号个数
+                c += line.count('．')
+
+##            print ( words_num )
+##            print ( a )
+##            print ( b )
+            
+            if a < 20:
+                a = 0                              # 逗号个数少于20强制为0，有时句读和无标点文献会有个别逗号
+            if b < 20:
+                b = 0                              # 句号个数少于20强制为0，有时句读和无标点文献会有个别逗号
+            
+            v1 = a * b
+            v2 = a + b
+                
+            if v1:
+                if a/words_num <0.01:
+                    typ = 4; 
+                    file_type = "其他"  
+                else:
+                    typ = 1;                        # 累积逗号和句号都不为零，判断为标点过的文献
+                    file_type = "标点"
+
+            elif v2:
+                if c != 0:
+                    typ = 4; 
+                    file_type = "其他"
+                elif b == 0:
+                    typ = 3; 
+                    file_type = "无标点"
+                else:
+                    typ = 2;                        # 累积逗号为零，句号不为零，判断为句读文献
+                    file_type = "句读"
+
+            else:
+                typ = 3;                            # 累积逗号和句号都为零，判断为未标点过的文献
+                file_type = "无标点"
+
+            dist_path = store_path[typ] + filename
+            shutil.copyfile( file_path, dist_path )             # 将文件拷贝到分类文件夹
+
+            row = [ numb, filename, file_type, words_num, filsiz, file_path ]
+                
+            for i in range( len(row) ):
+                wksht.cell( numb+1, i+1 ).value = row[i]        # 写入Excel表单
+
+            wkbk.save( listpath_xlsx )
+#        print ( listpath_xlsx )
+
