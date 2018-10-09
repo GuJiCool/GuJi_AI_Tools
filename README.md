@@ -1,5 +1,5 @@
 # GuJi_AI_Tools
-  The tools of working on chinese ancient texts.
+  The working tools of Chinese ancient works.
   1. Automatic Punctuation
   2. Automatic Annotation
   3. Automatic Phoneticize
