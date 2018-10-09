@@ -1,5 +1,5 @@
 # GuJi_AI_Tools
-  The datasets used in projects of collation tools on chinese ancient texts.
+  The tools of working on chinese ancient texts.
   1. Automatic Punctuation
   2. Automatic Annotation
   3. Automatic Phoneticize
